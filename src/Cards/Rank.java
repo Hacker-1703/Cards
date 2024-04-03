@@ -17,8 +17,8 @@ public enum Rank {
 
     private int num;
 
-    Rank(int num2) {
-        num = num2;
+    Rank(int num) {
+        this.num = num;
     }
 
     int getNum() {
