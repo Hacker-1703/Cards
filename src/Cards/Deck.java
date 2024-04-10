@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    ArrayList<Card> cards = new ArrayList<>();
+    private ArrayList<Card> cards = new ArrayList<>();
 
-    Deck(boolean fullDeck) {
-        if (fullDeck) {
+    Deck(int numberCards) throws Exception {
+        if (numberCards == 52) {
             for (Suit suit : Suit.values()) {
                 for (Rank rank : Rank.values()) {
                     cards.add(new Card(suit, rank));
                 }
             }
-        } else {
+        } else if (numberCards == 36) {
             for (Suit suit : Suit.values()) {
                 for (Rank rank : Rank.values()) {
                     if (rank == Rank.TWO || rank == Rank.THREE || rank == Rank.FOR || rank == Rank.FIVE) {
@@ -22,68 +22,35 @@ public class Deck {
                     cards.add(new Card(suit, rank));
                 }
             }
+        } else {
+            throw new Exception("Введено неверное количество карт (может быть только 52 или 36).");
         }
 
     }
 
     public void shuffle() {
         Collections.shuffle(cards);
-        this.cards = cards;
     }
 
     public void arrange() {
-        for (int i = 0; i < cards.size(); i++) {
-            for (int j = cards.size() - 1; j > i; j--) {
-                if (cards.get(j - 1).getSuit().getNum() > cards.get(j).getSuit().getNum()) {
-                    Card tmp = cards.get(j - 1);
-                    cards.set(j - 1, cards.get(j));
-                    cards.set(j, tmp);
-                }
+        cards.sort((card1, card2) -> {
+            int suitComparison = card1.getRank().compareTo(card2.getRank());
+            if (suitComparison != 0) {
+                return suitComparison;
             }
-        }
-        for (int i = 0; i < cards.size() / 4; i++) {
-            for (int j = cards.size() / 4 - 1; j > i; j--) {
-                if (cards.get(j - 1).getRank().getNum() > cards.get(j).getRank().getNum()) {
-                    Card tmp = cards.get(j - 1);
-                    cards.set(j - 1, cards.get(j));
-                    cards.set(j, tmp);
-                }
-            }
-        }
-        for (int i = cards.size() / 4; i < cards.size() / 2; i++) {
-            for (int j = cards.size() / 2 - 1; j > i; j--) {
-                if (cards.get(j - 1).getRank().getNum() > cards.get(j).getRank().getNum()) {
-                    Card tmp = cards.get(j - 1);
-                    cards.set(j - 1, cards.get(j));
-                    cards.set(j, tmp);
-                }
-            }
-        }
-        for (int i = cards.size() / 2; i < cards.size() - cards.size() / 4; i++) {
-            for (int j = cards.size() - cards.size() / 4 - 1; j > i; j--) {
-                if (cards.get(j - 1).getRank().getNum() > cards.get(j).getRank().getNum()) {
-                    Card tmp = cards.get(j - 1);
-                    cards.set(j - 1, cards.get(j));
-                    cards.set(j, tmp);
-                }
-            }
-        }
-        for (int i = cards.size() - cards.size() / 4; i < cards.size(); i++) {
-            for (int j = cards.size() - 1; j > i; j--) {
-                if (cards.get(j - 1).getRank().getNum() > cards.get(j).getRank().getNum()) {
-                    Card tmp = cards.get(j - 1);
-                    cards.set(j - 1, cards.get(j));
-                    cards.set(j, tmp);
-                }
-            }
-        }
+            return card1.getSuit().compareTo(card2.getSuit());
+        });
     }
 
     public String viewDeck() {
         String infoCards = "";
         for (Card card : cards) {
-            infoCards = infoCards + card.getInfo() + "\n";
+            infoCards = infoCards + card + "\n";
         }
         return infoCards;
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 }

@@ -17,10 +17,6 @@ public class Card {
         return rank;
     }
 
-    public String getInfo() {
-        return "Ранк: " + rank + ", масть: " + suit;
-    }
-
     @Override
     public String toString() {
         return "Ранк: " + rank + ", масть: " + suit;
